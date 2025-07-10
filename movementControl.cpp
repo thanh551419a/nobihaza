@@ -43,20 +43,21 @@ void movementCtrl::update(float dt)
 }
 void movementCtrl::updateMovement(float dt)// hold keys W, A, S, D to move player
 {
-    float step = 40.0f; // step size for movement
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+    float step = 5.0f; // step size for movement
     auto gV = globalVal::getInstance();
 	auto tileSize = gV->getTileSize();
 	auto sizeMap = gV->getSizeMap();
 	auto gS = GameScene::getInstance();
 	auto bodySprite = gS->getChildByName("bodySprite");// tao bien bodySprite de truy cap den sprite cua player
+    int temp1 = visibleSize.height / 100;
 
 	/*auto posX = bodySprite->getPositionX();
     auto posY = bodySprite->getPositionY();*/
     
-    
     if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_W)) // move forward
     {
-        if (gV->getPlayerPosY() + step <= tileSize * (sizeMap - 5) + tileSize/2) {
+        if (gV->getPlayerPosY() + step <= tileSize * (sizeMap - temp1)  ) {
             gV->setPlayerPosY(gV->getPlayerPosY() + step);
         }
         /*else if(gv->getPlayerPosY() + step <= tileSize * (sizeMap)) {
@@ -65,19 +66,19 @@ void movementCtrl::updateMovement(float dt)// hold keys W, A, S, D to move playe
     }
     if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_S)) // move backward
     {
-        if (gV->getPlayerPosY() - step >= tileSize * 3 + tileSize/2) { // min 0
+        if (gV->getPlayerPosY() - step >= tileSize * temp1 ) { // min 0
             gV->setPlayerPosY(gV->getPlayerPosY() - step);
 		}
     }
     if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_A)) // move left
     {
-        if (gV->getPlayerPosX() - step >= tileSize * 1) {// min 0
+        if (gV->getPlayerPosX() - step >= tileSize * temp1) {// min 0
             gV->setPlayerPosX(gV->getPlayerPosX() - step);
         }
     }
     if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_D)) // move right
     {
-        if (gV->getPlayerPosX() + step <= tileSize * (sizeMap - 1)) {
+        if (gV->getPlayerPosX() + step <= tileSize * (sizeMap -temp1)) {
             gV->setPlayerPosX(gV->getPlayerPosX() + step);
         }
     }

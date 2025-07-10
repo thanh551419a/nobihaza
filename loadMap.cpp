@@ -48,37 +48,37 @@ void LoadMap::update(float dt) {
     // Ví dụ: kiểm tra va chạm, cập nhật trạng thái, v.v.
     // Hiện tại chỉ là một hàm trống để có thể mở rộng sau này
 
+    auto sprite = Sprite::create("/PHOTO/Map/duong.png");
+    if (sprite == nullptr) {
+        CCLOG("Failed to load image /PHOTO/Map/duong.png");
+        // Xử lý lỗi, ví dụ đặt tileSize mặc định hoặc thoát
+        gV->setTileSize(32); // ví dụ kích thước mặc định
+    }
+    else {
+        gV->setTileSize(sprite->getContentSize().width);
+    }
+    auto tileSize = gV->getTileSize();// lấy kích thước 1 block 
+    
+    auto frameSize = Director::getInstance()->getOpenGLView()->getVisibleSize();
 
-
-
-   
-	
-    
-    
-    gV->setTileSize((Sprite::create("./PHOTO/Map/duong.png"))->getContentSize().width); // đặt kích thước cho biến tileSize trong globalVal
-	auto tileSize = gV->getTileSize();// lấy kích thước 1 block 
-    
-    
     playerPosX = gV->getPlayerPosX(); // Cập nhật vị trí người chơi nếu cần
     playerPosY = gV->getPlayerPosY(); // Cập nhật vị trí người chơi nếu cần
     //buoc 1: xac dinh o bat dau
 	//=> o bat dau la (x1 - 1, y1);
-    int x = playerPosX / tileSize - 4;     // Tính toán tọa độ ô bắt đầu theo trục x
-    int y = playerPosY / tileSize - 4;     // Tính toán tọa độ ô bắt đầu theo trục y
-    int width = 9;                 // Số cột cần render
-    int height = 9;                // Số hàng cần render
-
-
-	
-  
+	CCLOG("do rong cua : %f %f", frameSize.width, frameSize.height);
+    int width = frameSize.height / tileSize;                 // Số cột cần render
+    int height = frameSize.height / tileSize;                // Số hàng cần render
+	//CCLOG("Width: %d, Height: %d", width, height);
+    int x = playerPosX / tileSize - width/2 ;     // Tính toán tọa độ ô bắt đầu theo trục x
+    int y = playerPosY / tileSize - width/2;     // Tính toán tọa độ ô bắt đầu theo trục y
     Vec2 startBlock = Vec2(x, y);
 
 	//buoc 2: lech trai lech duoi
     auto leftOffset = playerPosX % tileSize;
 	auto bottomOffset = playerPosY % tileSize;
     auto addX = 0 ,addY = 0;
-
-    //buoc 3: bao nhieu o render
+    
+    //buoc 3: bao nhieu o renderx
     if (leftOffset == 0) addX = 0;
 	else addX = 1;
     if (bottomOffset == 0) addY = 0;
@@ -99,17 +99,17 @@ void LoadMap::update(float dt) {
 			//CCLOG("Tile at (%d, %d): %d", i, j, tile); // In ra giá trị của ô để kiểm tra
             Sprite* tileSprite = nullptr;
             if (tile == 1) {
-              tileSprite = Sprite::create("./PHOTO/Map/sanTruong.png");
+              tileSprite = Sprite::create("/PHOTO/Map/sanTruong.png");
             }
             else if (tile == 2) {
-               tileSprite = Sprite::create("./PHOTO/Map/viahe.png");
+               tileSprite = Sprite::create("/PHOTO/Map/viahe.png");
             }
             else if (tile == 3) {
-               tileSprite = Sprite::create("./PHOTO/Map/duong.png");
+               tileSprite = Sprite::create("/PHOTO/Map/duong.png");
             }
             if (tileSprite) {
                 tileSprite->setAnchorPoint(Vec2::ZERO);
-                tileSprite->setPosition(Vec2((i - x) * gV->getTileSize() - leftOffset + 175,
+                tileSprite->setPosition(Vec2((i - x) * gV->getTileSize() - leftOffset + (frameSize.width - frameSize.height) / 2,
                     (j - y) * gV->getTileSize() - bottomOffset));
                // CCLOG("%d", /(i - x) tileSize /- lechTrai +int(GlobalVariables::getInstance()->getHorizontal()));
                this->addChild(tileSprite);
@@ -119,11 +119,8 @@ void LoadMap::update(float dt) {
 
     // In ra thông tin để kiểm tra
     CCLOG("Start Block: (%f, %f)", startBlock.x, startBlock.y);
-
     //("Left Offset: %d, Bottom Offset: %d", leftOffset, bottomOffset);
 	CCLOG("Render Blocks: %d, Width: %d, Height: %d", renderBlock, width, height);
-
-
 }
 
 

@@ -34,7 +34,7 @@ bool GameScene::init()
 	
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 temp = Vec2(13*50 , 10*50);
+    Vec2 temp = Vec2(13*50 , 13*50);
 	globalVal::getInstance()->setPlayerPos(temp); // Initialize player position
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -50,7 +50,19 @@ bool GameScene::init()
     auto map = LoadMap::createFromFile("PHOTO/Map.txt");
     this->addChild(map);
 
-
+    // them phan layer 2 ben
+	auto layer1 = Sprite::create("PHOTO/Map/adding.png");
+	auto layer2 = Sprite::create("PHOTO/Map/adding.png");
+	auto tempSize = layer1->getContentSize().width;// 700 
+	//layer1->setPosition(  (visibleSize.width - visibleSize.height*3)/2 ,0);
+	layer1->setAnchorPoint(Vec2(0, 0)); // Set anchor point to bottom-left corner
+	layer2->setAnchorPoint(Vec2(0, 0)); // Set anchor point to bottom-left corner
+	layer1->setPosition( (visibleSize.width - 3* visibleSize.height)/2 ,0);
+	CCLOG("Layer1 position: %f %f", layer1->getPositionX(), layer1->getPositionY());
+	layer2->setPosition( (visibleSize.width + visibleSize.height) / 2 , 0);
+	CCLOG("visibleSize: %f %f", visibleSize.width, visibleSize.height); 
+	this->addChild(layer1,9999);
+	this->addChild(layer2,9999);
     // build body mc
     bodySprite = Sprite::create("PHOTO/player/player-base-01.png");
     bodySprite->setPosition(visibleSize.width / 2 + origin.x, visibleSize.height / 2);
