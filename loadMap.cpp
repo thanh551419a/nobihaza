@@ -43,7 +43,7 @@ bool LoadMap::initFromFile(const std::string& filename) {
     return true;
 }
 void LoadMap::update(float dt) {
-	this->removeAllChildren(); // Xóa tất cả các sprite đã render trước đó
+	//this->removeAllChildren(); // Xóa tất cả các sprite đã render trước đó
     // Cập nhật logic của bản đồ tại đây nếu cần
     // Ví dụ: kiểm tra va chạm, cập nhật trạng thái, v.v.
     // Hiện tại chỉ là một hàm trống để có thể mở rộng sau này
