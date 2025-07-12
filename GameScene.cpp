@@ -35,7 +35,7 @@ bool GameScene::init()
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 temp = Vec2(13*50 , 13*50);
-	globalVal::getInstance()->init(); // goi ham init reset lai tat ca
+	globalVal::getInstance()->init1(); // goi ham init reset lai tat ca
 	globalVal::getInstance()->setPlayerPos(temp); // Initialize player position
     Point origin = Director::getInstance()->getVisibleOrigin();
 
@@ -60,9 +60,9 @@ bool GameScene::init()
 	layer2->setAnchorPoint(Vec2(0, 0)); // Set anchor point to bottom-left corner
 	int layer1size = layer1->getContentSize().width; // 700
 	layer1->setPosition( (visibleSize.width -  visibleSize.height)/2 - layer1size ,0);
-	CCLOG("Layer1 position: %f %f", layer1->getPositionX(), layer1->getPositionY());
+//	CCLOG("Layer1 position: %f %f", layer1->getPositionX(), layer1->getPositionY());
 	layer2->setPosition( (visibleSize.width + visibleSize.height) / 2 , 0);
-	CCLOG("visibleSize: %f %f", visibleSize.width, visibleSize.height); 
+	//CCLOG("visibleSize: %f %f", visibleSize.width, visibleSize.height); 
 	this->addChild(layer1,9999);
 	this->addChild(layer2,9999);
     // build body mc
@@ -73,7 +73,7 @@ bool GameScene::init()
     bodySprite->setAnchorPoint(Vec2(0.5, 0.5));
     this->addChild(bodySprite);
 	auto bodySize = bodySprite->getContentSize();
-
+	movementCtrl::getInstance()->setBodySprite(bodySprite); // Set the body sprite in movementCtrl
     //build left arm 
     leftArmSprite = Sprite::create("PHOTO/player/player-hands-02.png");
     auto leftArmSize = leftArmSprite->getContentSize();
@@ -115,7 +115,7 @@ bool GameScene::init()
     //pauseButton->setOpacity(200); // semi-transparent để dễ thấy
    
 
-    CCLOG("%f %f", origin.x, origin.y);
+  //  CCLOG("%f %f", origin.x, origin.y);
 
 	this->scheduleUpdate(); // Schedule the update method to be called every frame
 
@@ -139,5 +139,5 @@ GameScene* GameScene::getInstance()
 void GameScene::update(float dt)
 {
 	movementCtrl::getInstance()->updateMovement(dt); // Update player movement based on held keys
-	CCLOG("Player Position: (%f, %f)", globalVal::getInstance()->getPlayerPosX(), globalVal::getInstance()->getPlayerPosY());
+	//CCLOG("Player Position: (%f, %f)", globalVal::getInstance()->getPlayerPosX(), globalVal::getInstance()->getPlayerPosY());
 }

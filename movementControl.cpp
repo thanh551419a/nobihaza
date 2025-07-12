@@ -2,7 +2,7 @@
 #include "cocos2d.h"
 #include "GameScene.h"
 #include "movementControl.h"
-#include "loadMap.h";
+#include "loadMap.h"
 bool movementCtrl::init() {
     if (!Node::init())
         return false;
@@ -13,7 +13,7 @@ bool movementCtrl::init() {
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(keyboardListener, this);
 
-	this->scheduleUpdate(); // Schedule update method to be called every frame
+    this->scheduleUpdate(); // Schedule update method to be called every frame
 
     return true;
 }
@@ -43,50 +43,75 @@ void movementCtrl::update(float dt)
 }
 void movementCtrl::updateMovement(float dt)// hold keys W, A, S, D to move player
 {
-	auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto visibleSize = Director::getInstance()->getVisibleSize();
     float step = 5.0f; // step size for movement
     auto gV = globalVal::getInstance();
-	auto tileSize = gV->getTileSize();
-	auto sizeMap = gV->getSizeMap();
-	auto gS = GameScene::getInstance();
-	auto bodySprite = gS->getChildByName("bodySprite");// tao bien bodySprite de truy cap den sprite cua player
-    int temp1 = visibleSize.height / 100;
+    auto tileSize = gV->getTileSize();
+    auto sizeMap = gV->getSizeMap();
+    auto gS = GameScene::getInstance();
+    
+    int temp1 = visibleSize.height / 100;// temp 1 la 1 nua man hinh
 
-	/*auto posX = bodySprite->getPositionX();
+    /*auto posX = bodySprite->getPositionX();
     auto posY = bodySprite->getPositionY();*/
     // khi nhan vat di chuyen , tinh toan truoc cac huong cua nhan vat 
    // sau do moi cap nhat vi tri cua nhan vat
     /*
-		diThang = -1: di thang len
-		sangNgang = -1: di sang phai
-		gV->setPlayerPos(posX + diThang * step, posY + diNgang * step);
+        diThang = -1: di thang len
+        sangNgang = -1: di sang phai
+        gV->setPlayerPos(posX + diThang * step, posY + diNgang * step);
     */
-    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_W) &&
-		gV->getPlayerPosY() + step <= tileSize * (sizeMap)) { // nhan vat không vượt quá kích thước bản đồ) // move forward
-            if (gV->getPlayerPosY() + step <= tileSize * (sizeMap - temp1)  ) {// nhan vat chua di den vi tri ma nhan vat can di chuyen , map dung im 
-                gV->setDiThang(1);
-            }
-            else {
-				gV->setDiThang(2);
-            }
+	//CCLOG("Player Position: (%f, %d)", gV->getPlayerPosX() + step, );
+    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_W) && gV->getPlayerPosY() + step <= tileSize * sizeMap) { // nhan vat không vượt quá kích thước bản đồ) // move forward
+        //CCLOG("djt me may");
+        //CCLOG("Player Position before: (%f, %f)", gV->getPlayerPosX(), gV->getPlayerPosY());
+        gV->setPlayerPosY(gV->getPlayerPosY() + step);// cap nhat lai vi tri cua nhan vat trong globalVal
+        //CCLOG("Player Position after: (%f, %f)", gV->getPlayerPosX(), gV->getPlayerPosY());
+        //CCLOG("%d", tileSize * (sizeMap - temp1));
+        if (gV->getPlayerPosY() > tileSize * (sizeMap - temp1)) { // di vao phan nhan vat di chuyen map dung im
+            _bodySprite->setPositionY(_bodySprite->getPositionY() + step);
+        }
+        if (_bodySprite->getPositionY() < tileSize * temp1) { // neu vi tri nhan vat di vao vung nhan vat di chuyen map dung im
+            _bodySprite->setPositionY(_bodySprite->getPositionY() + step);
+        }
     }
-    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_S)) // move backward
+
+    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_S) && gV->getPlayerPosY() - step >= 0) // move backward
     {
-        if (gV->getPlayerPosY() - step >= tileSize * temp1 ) { // min 0
-            gV->setPlayerPosY(gV->getPlayerPosY() - step);
+        gV->setPlayerPosY(gV->getPlayerPosY() - step);
+        if (gV->getPlayerPosY() < tileSize * temp1) { // neu vi tri nhan vat di vao vung nhan vat di chuyen map dung im
+            _bodySprite->setPositionY(_bodySprite->getPositionY() - step);
+        }
+        if (_bodySprite->getPositionY() > tileSize * temp1) { // di vao phan nhan vat di chuyen map dung im
+            _bodySprite->setPositionY(_bodySprite->getPositionY() - step);
+        }
+    }
+
+    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_A) && gV->getPlayerPosX() - step >= 0) // move left
+    {
+		gV->setPlayerPosX(gV->getPlayerPosX() - step);
+        if (gV->getPlayerPosX() < tileSize * temp1) { // neu vi tri nhan vat di vao vung nhan vat di chuyen map dung im
+            _bodySprite->setPositionX(_bodySprite->getPositionX() - step);
+        }
+        if (_bodySprite->getPositionX() > tileSize * (sizeMap - temp1)) { // di vao phan nhan vat di chuyen map dung im
+            _bodySprite->setPositionX(_bodySprite->getPositionX() - step);
 		}
     }
-    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_A)) // move left
+
+    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_D) && gV->getPlayerPosX() + step < sizeMap * tileSize) // move right
     {
-        if (gV->getPlayerPosX() - step >= tileSize * temp1) {// min 0
-            gV->setPlayerPosX(gV->getPlayerPosX() - step);
+		gV->setPlayerPosX(gV->getPlayerPosX() + step);
+        if (gV->getPlayerPosX() > tileSize * (sizeMap - temp1)) { // neu vi tri nhan vat di vao vung nhan vat di chuyen map dung im
+            _bodySprite->setPositionX(_bodySprite->getPositionX() + step);
+        }
+        if (_bodySprite->getPositionX() < tileSize * temp1) { // di vao phan nhan vat di chuyen map dung im
+            _bodySprite->setPositionX(_bodySprite->getPositionX() + step);
         }
     }
-    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_D)) // move right
-    {
-        if (gV->getPlayerPosX() + step <= tileSize * (sizeMap -temp1)) {
-            gV->setPlayerPosX(gV->getPlayerPosX() + step);
-        }
-    }
+	CCLOG("Player Position: (%f, %f)", gV->getPlayerPosX(), gV->getPlayerPosY());
+	CCLOG("Body Sprite Position: (%f, %f)", _bodySprite->getPositionX(), _bodySprite->getPositionY());
 }
 // End of movementControl.cpp 
+void movementCtrl::setBodySprite(cocos2d::Sprite* sprite) {
+	_bodySprite = sprite; // lay bodySprite tu GameScene
+}

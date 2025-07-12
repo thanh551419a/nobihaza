@@ -4,7 +4,7 @@ globalVal* globalVal::getInstance() {
 	static globalVal instance;
 	return &instance;
 }
-void globalVal::init() {
+void globalVal::init1() {
 		// Initialize player position to a default value
 	playerPos = cocos2d::Vec2(0, 0);
 	sizeMap = 0; // Default size of the map
