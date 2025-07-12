@@ -24,8 +24,8 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
 
-    
-    void GoToPauseScene(Ref *pSender);
+
+    void GoToPauseScene(Ref* pSender);
     void GoToGameOverScene(Ref* pSender);
     //void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
     //void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event); // Handle key release events if needed
@@ -33,6 +33,8 @@ public:
 
     virtual void update(float dt) override;// Update logic can be added here if needed
     static GameScene* getInstance();
+    cocos2d::Sprite* getBodySprite() const;
+
 };
 
 #endif // __GAME_SCENE_H__
