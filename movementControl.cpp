@@ -83,7 +83,7 @@ void movementCtrl::updateMovement(float dt)
 
     }
 
-  /*  if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_A)) {
+    if (heldKeyAWDS.count(EventKeyboard::KeyCode::KEY_A)) {
         if (gV->getPlayerPosX() - step >= tileSize * temp1) {
             gV->setPlayerPosX(gV->getPlayerPosX() - step);
         }
@@ -93,5 +93,5 @@ void movementCtrl::updateMovement(float dt)
         if (gV->getPlayerPosX() + step <= tileSize * (sizeMap - temp1)) {
             gV->setPlayerPosX(gV->getPlayerPosX() + step);
         }
-    }*/
+    }
 }
