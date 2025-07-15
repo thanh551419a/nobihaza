@@ -138,6 +138,22 @@ GameScene* GameScene::getInstance()
 }
 void GameScene::update(float dt)
 {
-	movementCtrl::getInstance()->updateMovement(dt); // Update player movement based on held keys
-	//CCLOG("Player Position: (%f, %f)", globalVal::getInstance()->getPlayerPosX(), globalVal::getInstance()->getPlayerPosY());
+    // Cập nhật di chuyển
+    movementCtrl::getInstance()->updateMovement(dt);
+
+    // Lấy player position
+    auto gV = globalVal::getInstance();
+    Vec2 playerPos(gV->getPlayerPosX(), gV->getPlayerPosY());
+
+    // Lấy kích thước màn hình và map
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    auto mapSizeInPixels = Size(globalVal::getInstance()->getSizeMap() * globalVal::getInstance()->getTileSize(),
+        globalVal::getInstance()->getSizeMap() * globalVal::getInstance()->getTileSize());
+
+    // Giới hạn vị trí camera không đi ra khỏi bản đồ
+    float cameraX = std::max(visibleSize.width / 2, std::min(playerPos.x, mapSizeInPixels.width - visibleSize.width / 2));
+    float cameraY = std::max(visibleSize.height / 2, std::min(playerPos.y, mapSizeInPixels.height - visibleSize.height / 2));
+
+    // Đặt vị trí scene sao cho nhân vật ở giữa (nếu còn trong vùng trung tâm)
+    this->setPosition(Vec2(visibleSize.width / 2 - cameraX, visibleSize.height / 2 - cameraY));
 }
